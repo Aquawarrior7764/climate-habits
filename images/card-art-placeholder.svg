@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="480" viewBox="0 0 600 480">
+  <rect width="600" height="480" fill="#dce9d6"/>
+  <circle cx="300" cy="205" r="123" fill="#c5d7b9"/>
+  <g fill="none" stroke="#4b7047" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M300 294V181m0 66c-62 0-92-34-92-86 61 0 92 31 92 86Zm0-30c0-55 31-86 92-86 0 53-31 86-92 86Z"/>
+    <path d="M270 294h60"/>
+  </g>
+  <text x="300" y="400" text-anchor="middle" font-family="system-ui,sans-serif" font-size="22" fill="#3b5c37" letter-spacing="3">YOUR FOOD IMAGE HERE</text>
+</svg>

@@ -1,9 +1,15 @@
 <!DOCTYPE html>
+<!-- Food card integration modified 2026-11-15; GPL-3.0-only.
+     Motion/lighting copyright (C) 2022 Simon Goellner; see CARD-CREDITS.md. -->
 <html lang="en"><head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Food and Eating Habits</title>
+  <link rel="icon" href="images/card-art-placeholder.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/climate-cards.css">
+  <!-- Defer from the head so main.js's editor snapshot includes this script. -->
+  <script src="js/climate-cards.js" defer></script>
 </head>
 <!-- The whole page is green because of class="theme-food" on <body> -->
 <body class="theme-food">
@@ -57,14 +63,92 @@
       </div>
     </section>
 
-    <section class="section tinted">
-      <div class="wrap narrow">
-        <h2>Food game</h2>
-        <!-- PLACEHOLDER: this box is design filler, not content. Replace it with the game. -->
-        <div class="placeholder">
-          <p><strong>Placeholder</strong></p>
-          <p class="fine-print">lalalalala</p>
+    <section class="section tinted" id="food-game" aria-labelledby="food-game-title">
+      <div class="wrap">
+        <h2 id="food-game-title">Food game</h2>
+        <p id="card-instructions">Explore the cards. Move your mouse to catch the light; click or tap to turn one over. You can also use Tab, then Enter or Space.</p>
+        <!-- Card content is deliberately static HTML so the existing page editor can save it.
+             Replace the sample art and back text here, or click “Edit this page”.
+             Each new card needs unique front/back IDs and matching aria-controls. -->
+        <div class="climate-deck" aria-describedby="card-instructions">
+          <article class="climate-card" data-climate-card>
+            <div class="climate-card__tilt">
+              <div class="climate-card__flip">
+                <div class="climate-card__face climate-card__front" id="food-card-1-front">
+                  <p class="climate-card__eyebrow">Climate Habits · Food / 01</p>
+                  <h3>Beans &amp; lentils</h3>
+                  <img class="climate-card__art" src="images/card-art-placeholder.svg" width="600" height="480" alt="Placeholder artwork; add a photo of beans and lentils.">
+                  <p class="climate-card__caption">A different kind of protein.</p>
+                  <p class="climate-card__hint">Turn over to explore <span aria-hidden="true">↻</span></p>
+                  <div class="climate-card__shine" aria-hidden="true"></div>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+                <div class="climate-card__face climate-card__back" id="food-card-1-back">
+                  <p class="climate-card__eyebrow">Climate Habits · The other side</p>
+                  <h3>Beans &amp; lentils</h3>
+                  <p class="climate-card__body">Your food facts go here. Add what you want players to learn about beans and lentils.</p>
+                  <p class="climate-card__prompt">Your question or small action goes here.</p>
+                  <p class="climate-card__hint">Turn back to the front <span aria-hidden="true">↻</span></p>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+              </div>
+            </div>
+            <button class="climate-card__toggle" type="button" hidden aria-pressed="false" aria-controls="food-card-1-front food-card-1-back" aria-label="Turn over food card"></button>
+          </article>
+          <article class="climate-card" data-climate-card>
+            <div class="climate-card__tilt">
+              <div class="climate-card__flip">
+                <div class="climate-card__face climate-card__front" id="food-card-2-front">
+                  <p class="climate-card__eyebrow">Climate Habits · Food / 02</p>
+                  <h3>A plant-based meal</h3>
+                  <img class="climate-card__art" src="images/card-art-placeholder.svg" width="600" height="480" alt="Placeholder artwork; add a photo of a plant-based meal.">
+                  <p class="climate-card__caption">Something new on your plate.</p>
+                  <p class="climate-card__hint">Turn over to explore <span aria-hidden="true">↻</span></p>
+                  <div class="climate-card__shine" aria-hidden="true"></div>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+                <div class="climate-card__face climate-card__back" id="food-card-2-back">
+                  <p class="climate-card__eyebrow">Climate Habits · The other side</p>
+                  <h3>A plant-based meal</h3>
+                  <p class="climate-card__body">Your food facts go here. Add what you want players to learn about trying a plant-based meal.</p>
+                  <p class="climate-card__prompt">Your question or small action goes here.</p>
+                  <p class="climate-card__hint">Turn back to the front <span aria-hidden="true">↻</span></p>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+              </div>
+            </div>
+            <button class="climate-card__toggle" type="button" hidden aria-pressed="false" aria-controls="food-card-2-front food-card-2-back" aria-label="Turn over food card"></button>
+          </article>
+          <article class="climate-card" data-climate-card>
+            <div class="climate-card__tilt">
+              <div class="climate-card__flip">
+                <div class="climate-card__face climate-card__front" id="food-card-3-front">
+                  <p class="climate-card__eyebrow">Climate Habits · Food / 03</p>
+                  <h3>Tomorrow’s leftovers</h3>
+                  <img class="climate-card__art" src="images/card-art-placeholder.svg" width="600" height="480" alt="Placeholder artwork; add a photo of leftovers packed for another meal.">
+                  <p class="climate-card__caption">A second helping of possibility.</p>
+                  <p class="climate-card__hint">Turn over to explore <span aria-hidden="true">↻</span></p>
+                  <div class="climate-card__shine" aria-hidden="true"></div>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+                <div class="climate-card__face climate-card__back" id="food-card-3-back">
+                  <p class="climate-card__eyebrow">Climate Habits · The other side</p>
+                  <h3>Tomorrow’s leftovers</h3>
+                  <p class="climate-card__body">Your food facts go here. Add what you want players to learn about making another meal from leftovers.</p>
+                  <p class="climate-card__prompt">Your question or small action goes here.</p>
+                  <p class="climate-card__hint">Turn back to the front <span aria-hidden="true">↻</span></p>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+              </div>
+            </div>
+            <button class="climate-card__toggle" type="button" hidden aria-pressed="false" aria-controls="food-card-3-front food-card-3-back" aria-label="Turn over food card"></button>
+          </article>
         </div>
+        <noscript>Both sides are shown below each other when JavaScript is off.</noscript>
+        <details class="climate-card-credits">
+          <summary>Card effect credits &amp; source</summary>
+          <p>Motion and lighting adapted from <a href="https://github.com/simeydotme/pokemon-cards-css">Pokémon Cards CSS</a>, © 2022 Simon Goellner. Modified for Climate Habits, November 15, 2026. This card experience is free software under <a href="licenses/pokemon-cards-css-GPL-3.0.txt">GPL-3.0</a>, without warranty; you may redistribute and modify it under that license. <a href="CARD-CREDITS.md">Attribution and source details</a>.</p>
+        </details>
       </div>
     </section>
   </main>
