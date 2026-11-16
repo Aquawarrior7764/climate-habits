@@ -1,9 +1,15 @@
 <!DOCTYPE html>
+<!-- Food card integration modified 2026-11-16; GPL-3.0-only.
+     Motion/lighting copyright (C) 2022 Simon Goellner; see CARD-CREDITS.md. -->
 <html lang="en"><head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Food and Eating Habits</title>
+  <link rel="icon" href="images/card-art-placeholder.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/climate-cards.css">
+  <!-- Defer from the head so main.js's editor snapshot includes this script. -->
+  <script src="js/climate-cards.js" defer></script>
 </head>
 <!-- The whole page is green because of class="theme-food" on <body> -->
 <body class="theme-food">
@@ -57,14 +63,67 @@
       </div>
     </section>
 
-    <section class="section tinted">
-      <div class="wrap narrow">
-        <h2>Food game</h2>
-        <!-- PLACEHOLDER: this box is design filler, not content. Replace it with the game. -->
-        <div class="placeholder">
-          <p><strong>Placeholder</strong></p>
-          <p class="fine-print">lalalalala</p>
+    <section class="section tinted" id="food-game" aria-labelledby="food-game-title">
+      <div class="wrap">
+        <h2 id="food-game-title">Food game</h2>
+        <p id="card-instructions">Click a card to take a closer look.</p>
+        <!-- Card content is deliberately static HTML so the existing page editor can save it.
+             Replace the sample art and back text here, or click “Edit this page”.
+             Each new card needs unique front/back IDs and matching aria-controls. -->
+        <div class="climate-deck" aria-describedby="card-instructions">
+          <article class="climate-card" data-climate-card>
+            <div class="climate-card__tilt">
+              <div class="climate-card__flip">
+                <div class="climate-card__face climate-card__front" id="food-card-1-front">
+                  <img class="climate-card__art" src="images/card-art-placeholder.svg" width="600" height="840" alt="Beans and lentils — placeholder artwork.">
+                  <div class="climate-card__shine" aria-hidden="true"></div>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+                <div class="climate-card__face climate-card__back" id="food-card-1-back">
+                  <h3>Beans &amp; lentils</h3>
+                  <p class="climate-card__body">Add a short food fact here.</p>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+              </div>
+            </div>
+            <button class="climate-card__toggle" type="button" hidden aria-pressed="false" aria-controls="food-card-1-front food-card-1-back" aria-label="Turn over food card"></button>
+          </article>
+          <article class="climate-card" data-climate-card>
+            <div class="climate-card__tilt">
+              <div class="climate-card__flip">
+                <div class="climate-card__face climate-card__front" id="food-card-2-front">
+                  <img class="climate-card__art" src="images/card-art-placeholder.svg" width="600" height="840" alt="A plant-based meal — placeholder artwork.">
+                  <div class="climate-card__shine" aria-hidden="true"></div>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+                <div class="climate-card__face climate-card__back" id="food-card-2-back">
+                  <h3>A plant-based meal</h3>
+                  <p class="climate-card__body">Add a short food fact here.</p>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+              </div>
+            </div>
+            <button class="climate-card__toggle" type="button" hidden aria-pressed="false" aria-controls="food-card-2-front food-card-2-back" aria-label="Turn over food card"></button>
+          </article>
+          <article class="climate-card" data-climate-card>
+            <div class="climate-card__tilt">
+              <div class="climate-card__flip">
+                <div class="climate-card__face climate-card__front" id="food-card-3-front">
+                  <img class="climate-card__art" src="images/card-art-placeholder.svg" width="600" height="840" alt="Tomorrow’s leftovers — placeholder artwork.">
+                  <div class="climate-card__shine" aria-hidden="true"></div>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+                <div class="climate-card__face climate-card__back" id="food-card-3-back">
+                  <h3>Tomorrow’s leftovers</h3>
+                  <p class="climate-card__body">Add a short food fact here.</p>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+              </div>
+            </div>
+            <button class="climate-card__toggle" type="button" hidden aria-pressed="false" aria-controls="food-card-3-front food-card-3-back" aria-label="Turn over food card"></button>
+          </article>
         </div>
+        <noscript>Both sides are shown below each other when JavaScript is off.</noscript>
       </div>
     </section>
   </main>

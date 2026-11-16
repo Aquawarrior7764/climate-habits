@@ -348,7 +348,9 @@
         var a = document.createElement('a');
         a.href = URL.createObjectURL(new Blob([html2], { type: 'text/html' }));
         a.download = pageName;
-        document.body.appendChild(a);
+        // Keep the download inside the editor: the capture handler deliberately
+        // prevents clicks on page links while editing, including temporary ones.
+        ui.appendChild(a);
         a.click();
         a.remove();
         html = html2;

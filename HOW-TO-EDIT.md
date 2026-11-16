@@ -31,6 +31,12 @@ If you did both change the same sentence, nothing breaks and nothing is lost: pu
    - New pictures are copied into the `images` folder automatically.
 7. Click **Done**. For the Food or Transportation page, go there with the menu and click **✎ Edit this page** there. Each page saves separately.
 
+## Editing the Food cards
+
+On `food.html`, close any enlarged card, then click **✎ Edit this page**. Each card opens into a front/back pair. Click its sample image to replace it and click the back title and single short paragraph to add your own text. The front has no text. The cards stay still while you edit. Keep the back copy concise. Click **Save**, then **Done** to restore normal mouse tilt and click/tap spin-to-center behavior. Check the result on a phone-width window. The text and picture are stored in `food.html`, just like your other page edits.
+
+The three green leaf images are intentional placeholders. The sample names and back text are starting points; replace them with your own food items and educational content. Adding a fourth card requires copying its HTML block and giving its front/back unique IDs (see [CARD-CREDITS.md](CARD-CREDITS.md)).
+
 ## Put your changes online
 
 - **Jake:** double-click **PUBLISH.bat**. When it says **Done**, the live site updates in about a minute.
