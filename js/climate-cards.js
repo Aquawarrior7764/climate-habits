@@ -18,6 +18,7 @@
   const resting = { rx: 0, ry: 0, px: 50, py: 50, bx: 50, by: 50, opacity: 0 };
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
   const moving = new Set();
+  const closeTolerance = { tx: 1, ty: 1, flip: 1.5, scale: .006 };
   const cards = [];
   let frame = 0;
   let lastTime = 0;
@@ -96,8 +97,10 @@
         card.accumulator -= 1;
       }
       render(card);
-      if (card.closing && ['tx', 'ty', 'scale', 'flip'].every((key) =>
-        Math.abs(card.springs[key].value - card.springs[key].target) < .01)) {
+      // Finish as soon as the card is visually home; the spring's last fraction
+      // of a pixel otherwise holds the dark overlay on screen for a while.
+      if (card.closing && Object.entries(closeTolerance).every(([key, tolerance]) =>
+        Math.abs(card.springs[key].value - card.springs[key].target) < tolerance)) {
         finishClose(card);
       } else if (!active) {
         moving.delete(card);
@@ -149,13 +152,20 @@
     } else wake(card);
   }
 
-  function setPose(card, targets, immediate = reducedMotion.matches) {
+  function setPose(card, targets, immediate = reducedMotion.matches, stiffness = .033, damping = .45) {
     Object.entries(targets).forEach(([key, target]) => {
       if (immediate) card.springs[key].snap(target);
-      else card.springs[key].set(target, .033, .45);
+      else card.springs[key].set(target, stiffness, damping);
     });
     if (immediate) render(card);
     else wake(card);
+  }
+
+  // How big the open card should be, relative to its size in the deck.
+  function enlargement(rect) {
+    const width = document.documentElement.clientWidth;
+    const height = window.innerHeight;
+    return Math.min(width / rect.width * .84, height / rect.height * .82, 1.75);
   }
 
   function center(card, immediate = reducedMotion.matches) {
@@ -167,7 +177,9 @@
     setPose(card, {
       tx: width / 2 - rect.left - rect.width / 2,
       ty: height / 2 - rect.top - rect.height / 2,
-      scale: Math.min(width / rect.width * .84, height / rect.height * .82, 1.75),
+      // The card is already laid out at card.big times its deck size (crisp text),
+      // so scale 1 means "full enlarged size".
+      scale: enlargement(rect) / card.big,
       flip: 540
     }, immediate);
   }
@@ -190,10 +202,16 @@
       card.element.before(card.placeholder);
       const origin = card.origin;
       const style = card.element.style;
-      style.setProperty('--origin-left', origin.left + 'px');
-      style.setProperty('--origin-top', origin.top + 'px');
-      style.setProperty('--origin-width', origin.width + 'px');
-      style.setProperty('--origin-height', origin.height + 'px');
+      // Lay the card out at its final enlarged size (same centre as its slot)
+      // and shrink it with transform, so the text is drawn at full resolution.
+      card.big = enlargement(origin);
+      const w = origin.width * card.big, h = origin.height * card.big;
+      style.setProperty('--origin-left', (origin.left + origin.width / 2 - w / 2) + 'px');
+      style.setProperty('--origin-top', (origin.top + origin.height / 2 - h / 2) + 'px');
+      style.setProperty('--origin-width', w + 'px');
+      style.setProperty('--origin-height', h + 'px');
+      card.springs.scale.snap(1 / card.big);
+      render(card);
       viewer.append(card.element);
       card.element.classList.add('is-expanded');
       document.documentElement.classList.add('climate-card-open');
@@ -202,6 +220,7 @@
       viewer.setAttribute('aria-describedby', card.back.id);
       viewer.showModal();
     }
+    viewer.classList.remove('is-closing');
     card.closing = false;
     card.expanded = card.flipped = true;
     center(card);
@@ -214,6 +233,7 @@
     reset(card, true);
     card.expanded = card.flipped = false;
     card.closing = true;
+    viewer.classList.add('is-closing');   // start fading the dark background now
     publishState(card);
     if (immediate) {
       finishClose(card);
@@ -225,9 +245,9 @@
     setPose(card, {
       tx: slot.left + slot.width / 2 - origin.left - origin.width / 2,
       ty: slot.top + slot.height / 2 - origin.top - origin.height / 2,
-      scale: slot.width / origin.width,
+      scale: slot.width / (origin.width * card.big),
       flip: 0
-    }, false);
+    }, false, .08, .55);   // stiffer return: back in its slot in about half a second, no bounce
   }
 
   function finishClose(card, restoreFocus = true) {
@@ -242,6 +262,7 @@
     card.accumulator = 0;
     activeCard = null;
     viewer.close();
+    viewer.classList.remove('is-closing');
     document.documentElement.classList.remove('climate-card-open');
     updateAccessibility(card);
     if (restoreFocus && !editing) card.button.focus({ preventScroll: true });
@@ -275,7 +296,7 @@
     if (!button || !front || !back) return;
     const card = {
       element, button, front, back, flipped: false, expanded: false, closing: false,
-      leaveTimer: 0, accumulator: 0, origin: null, placeholder: null,
+      leaveTimer: 0, accumulator: 0, origin: null, placeholder: null, big: 1,
       springs: Object.fromEntries(Object.entries(resting).map(([key, value]) => [key, new Spring(value)]))
     };
     card.springs.flip = new Spring(0, .033, .45);

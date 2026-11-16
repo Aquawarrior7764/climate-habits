@@ -33,6 +33,7 @@
   min-width: 0;
   color: #eff5e9;
   perspective: 600px;
+  container-type: inline-size;   /* lets the text size follow the card's width (cqw) */
 }
 
 /* The hit area stays flat: measuring a tilted face causes feedback/jitter. */
@@ -63,7 +64,16 @@
   background: transparent;
   overflow: hidden;
 }
-.climate-card-viewer::backdrop { background: #102d2973; backdrop-filter: blur(2px); }
+.climate-card-viewer::backdrop {
+  background-color: #102d2973;
+  backdrop-filter: blur(2px);
+  transition: background-color .25s ease, backdrop-filter .25s ease;
+}
+.climate-card-viewer[open]::backdrop { animation: climate-backdrop-in .25s ease-out; }
+.climate-card-viewer.is-closing::backdrop { background-color: transparent; backdrop-filter: blur(0); }
+@keyframes climate-backdrop-in { from { background-color: transparent; backdrop-filter: blur(0); } }
+.climate-card-viewer__close { transition: opacity .2s ease; }
+.climate-card-viewer.is-closing .climate-card-viewer__close { opacity: 0; }
 .climate-card-viewer__close {
   position: absolute;
   top: max(16px, env(safe-area-inset-top));
@@ -121,10 +131,10 @@
   background: linear-gradient(145deg, #eef3e4, #dce8d5);
   color: #193b2d;
   justify-content: center;
-  gap: 20px;
+  gap: 6cqw;
 }
 .climate-card__face p { margin: 0; }
-.climate-card__face h3 { margin: 0; color: inherit; font-size: clamp(18px, 1.7vw, 24px); line-height: 1.2; }
+.climate-card__face h3 { margin: 0; color: inherit; font-size: max(16px, 7.5cqw); line-height: 1.2; }
 .climate-card__art {
   width: 100%;
   min-height: 0;
@@ -133,7 +143,7 @@
   border-radius: 7px;
 }
 .climate-card.is-animated .climate-card__art { height: 100%; }
-.climate-card__body { font-size: 16px; line-height: 1.55; }
+.climate-card__body { font-size: max(13px, 5.4cqw); line-height: 1.5; }
 
 /* A native button sits above the visual faces; no editable text inside a button. */
 .climate-card__toggle {
@@ -198,6 +208,8 @@
 /* Editing and no-JS: lay both faces out in normal flow, without animation,
  * so every image and paragraph can be selected and long text never clips. */
 .se-editing .climate-deck { grid-template-columns: 1fr; max-width: 760px; }
+.se-editing .climate-card__face h3 { font-size: 22px; }
+.se-editing .climate-card__body { font-size: 16px; }
 .se-editing .climate-card.is-animated { aspect-ratio: auto; }
 .se-editing .climate-card .climate-card__tilt,
 .se-editing .climate-card .climate-card__flip { transform: none; }
@@ -210,13 +222,13 @@
 
 @media (max-width: 1000px) {
   .climate-deck { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 680px; }
-  .climate-card__face h3 { font-size: 22px; }
 }
 @media (max-width: 640px) {
   .climate-deck { grid-template-columns: minmax(0, 1fr); max-width: 320px; gap: 32px; padding-inline: 10px; }
   .se-editing .climate-card__flip { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {
+  .climate-card-viewer::backdrop, .climate-card-viewer__close { transition: none; animation: none; }
   .climate-card.is-animated .climate-card__tilt { transform: none; }
   .climate-card__shine, .climate-card__glare { display: none; }
 }
