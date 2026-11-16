@@ -1,8 +1,8 @@
 # Climate Habits
 
-A small website about two everyday habits that affect climate change: **food** (green) and **transportation** (blue).
+A small website about two everyday habits that affect climate change: food (green) and transportation (blue).
 
-**To change words or pictures without coding, see [HOW-TO-EDIT.md](HOW-TO-EDIT.md).**
+To change words or pictures without coding, see [HOW-TO-EDIT.md](HOW-TO-EDIT.md).
 
 ## What's in here
 
