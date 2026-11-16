@@ -1,0 +1,202 @@
+/* =====================================================================
+   CLIMATE HABITS: one stylesheet for every page
+   ---------------------------------------------------------------------
+   HOW THE COLORS WORK
+   1. All colors are named once, right below.
+   2. A section gets its color by adding a class in the HTML:
+        class="theme-food"  -> green
+        class="theme-move"  -> blue
+        class="theme-mix"   -> plain (no color)
+   3. Everything inside that section reads --deep and --tint,
+      so it recolors itself.
+   To change a color for the whole site, change it here only.
+   ===================================================================== */
+
+:root {
+  /* Basics */
+  --ink: #222222;        /* text */
+  --paper: #ffffff;      /* page background */
+  --muted: #666666;      /* small grey text */
+  --line: #e2e2e2;       /* thin borders */
+  --soft: #f6f6f6;       /* light grey boxes */
+
+  /* Food = green */
+  --food-deep: #2e7d32;
+  --food-tint: #f0f7f0;
+
+  /* Transportation = blue */
+  --move-deep: #1f63b5;
+  --move-tint: #eef4fb;
+
+  /* Defaults used when a section has no theme class */
+  --deep: var(--ink);
+  --tint: var(--soft);
+
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --radius: 8px;
+}
+
+.theme-food { --deep: var(--food-deep); --tint: var(--food-tint); }
+.theme-move { --deep: var(--move-deep); --tint: var(--move-tint); }
+.theme-mix  { --deep: var(--ink);       --tint: var(--soft); }
+
+/* ---------- Basics ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 70px; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+img { max-width: 100%; height: auto; display: block; }
+h1, h2, h3, h4 { line-height: 1.2; margin: 0 0 .5em; font-weight: 700; }
+h2 { font-size: clamp(1.6rem, 3vw, 2rem); color: var(--deep); }
+h3 { font-size: 1.25rem; }
+h4 { font-size: 1.1rem; }
+p { margin: 0 0 1em; }
+a { color: var(--deep); text-underline-offset: 3px; }
+:focus-visible { outline: 3px solid #f2b705; outline-offset: 2px; }
+
+.wrap { width: min(1100px, 100% - 2.5rem); margin-inline: auto; }
+.narrow { max-width: 760px; }
+
+.skip-link { position: absolute; left: -999px; top: 0; background: #fff; color: var(--ink); padding: .6rem 1rem; z-index: 100; }
+.skip-link:focus { left: .5rem; top: .5rem; }
+
+.fine-print { font-size: .875rem; color: var(--muted); }
+
+/* ---------- Header and navigation ---------- */
+.site-header { position: sticky; top: 0; z-index: 50; background: #fff; border-bottom: 1px solid var(--line); }
+.header-inner { display: flex; align-items: center; justify-content: space-between; min-height: 60px; gap: 1rem; }
+.site-nav ul { list-style: none; display: flex; gap: .25rem; margin: 0; padding: 0; }
+.site-nav a { display: block; padding: .5rem .7rem; color: var(--ink); text-decoration: none; font-size: .95rem; }
+.site-nav a:hover { text-decoration: underline; }
+.site-nav a[aria-current="page"] { font-weight: 700; }
+.site-nav .nav-food { color: var(--food-deep); }
+.site-nav .nav-move { color: var(--move-deep); }
+
+.nav-toggle {
+  display: none; align-items: center; gap: .5rem;
+  background: none; border: 1px solid var(--line); color: var(--ink);
+  font: inherit; font-size: .95rem; padding: .4rem .8rem; border-radius: var(--radius); cursor: pointer;
+}
+.nav-toggle-bars, .nav-toggle-bars::before, .nav-toggle-bars::after {
+  display: block; width: 16px; height: 2px; background: currentColor; content: ""; position: relative;
+}
+.nav-toggle-bars::before { position: absolute; top: -5px; }
+.nav-toggle-bars::after { position: absolute; top: 5px; }
+
+/* ---------- Intro at the top of each page ---------- */
+.hero { padding: clamp(2.5rem, 6vw, 4.5rem) 0; }
+.hero h1 { font-size: clamp(2.2rem, 5vw, 3.25rem); margin-bottom: .4em; }
+.hero h1 em { font-style: normal; }
+.hero-lede { font-size: 1.2rem; max-width: 44rem; }
+.hero-note { font-weight: 600; margin: 0; }
+
+/* Food and Transportation pages: light green / light blue intro */
+.hero-themed { background: var(--tint); }
+.hero-themed h1 { color: var(--deep); }
+
+/* ---------- The two halves on the home page ---------- */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; width: min(1100px, 100% - 2.5rem); margin: 0 auto 2.5rem; }
+.split-half { background: var(--tint); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; }
+.split-half img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.split-body { padding: 1.5rem; }
+.split-plus { display: none; }
+
+/* ---------- Buttons ---------- */
+.btn-row { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.25rem; }
+.btn {
+  display: inline-block; padding: .6rem 1.1rem; border-radius: var(--radius);
+  background: var(--deep); color: #fff; border: 1px solid var(--deep);
+  font: inherit; font-weight: 600; font-size: .95rem; text-decoration: none; cursor: pointer;
+}
+.btn:hover { opacity: .88; }
+.btn-ghost, .btn-outline { background: #fff; color: var(--deep); }
+
+/* ---------- Sections ---------- */
+.section { padding: clamp(2.5rem, 6vw, 4rem) 0; border-top: 1px solid var(--line); }
+.section.tinted { background: var(--tint); }
+.section-lede { font-size: 1.15rem; max-width: 46rem; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.5rem, 5vw, 3.5rem); margin: 1.5rem auto; }
+.rounded { border-radius: var(--radius); }
+
+/* Number boxes */
+.stat-row-tight { grid-template-columns: 1fr; margin: 1.25rem 0 .5rem; }
+.stat { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 1.25rem; }
+.stat-num { font-size: 2.25rem; font-weight: 700; line-height: 1.1; color: var(--deep); margin-bottom: .4rem; }
+.stat-num span { font-size: 1rem; font-weight: 600; }
+.stat-label { margin: 0; color: var(--muted); }
+
+/* Lists of facts / changes */
+.steps { list-style: none; padding: 0; margin: 0 0 1.5rem; display: grid; gap: .75rem; }
+.steps li { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: .9rem 1.1rem; }
+.steps strong { display: block; color: var(--deep); }
+
+/* Three pictures in a row */
+.photo-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.photo-row img { width: 100%; height: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+
+/* ---------- Checklist ---------- */
+.checklist { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+.check-group { margin: 0; padding: 1.25rem; background: var(--tint); border: 1px solid var(--line); border-radius: var(--radius); min-width: 0; }
+.check-group legend { float: left; width: 100%; font-size: 1.25rem; font-weight: 700; color: var(--deep); margin-bottom: .5rem; padding: 0; }
+.check-group label { clear: both; display: flex; align-items: flex-start; gap: .7rem; padding: .5rem .25rem; cursor: pointer; }
+.check-group input { width: 1.2rem; height: 1.2rem; margin: .2rem 0 0; flex: none; accent-color: var(--deep); cursor: pointer; }
+.check-summary { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1rem; }
+#remind-status { flex-basis: 100%; margin: 0; }
+
+/* ---------- Daily check-in pop-up ---------- */
+.checkin { width: min(30rem, calc(100% - 2rem)); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem; }
+.checkin::backdrop { background: rgba(0,0,0,.35); }
+.checkin h2 { font-size: 1.35rem; color: var(--ink); }
+.checkin-list { list-style: none; padding: 0; margin: 1rem 0; display: grid; gap: .9rem; }
+.checkin-list li { display: grid; gap: .4rem; }
+.checkin-buttons { display: flex; gap: .5rem; }
+.checkin-btn { font: inherit; font-size: .9rem; font-weight: 600; padding: .4rem .85rem; border-radius: var(--radius); border: 1px solid #bbb; background: #fff; color: var(--ink); cursor: pointer; }
+.checkin-done[aria-pressed="true"] { background: var(--food-deep); border-color: var(--food-deep); color: #fff; }
+.checkin-notyet[aria-pressed="true"] { background: #888; border-color: #888; color: #fff; }
+.checkin-score { font-weight: 600; color: var(--food-deep); }
+
+/* ---------- Works cited ---------- */
+.cited-title { margin-top: 2rem; font-size: 1.5rem; }
+.cited { list-style: none; padding: 0; font-size: .95rem; }
+.cited li { padding-left: 2.5em; text-indent: -2.5em; margin-bottom: .9em; overflow-wrap: anywhere; }  /* hanging indent */
+
+/* ---------- Placeholder box (Food / Transportation pages) ---------- */
+.placeholder { border: 2px dashed #bbb; border-radius: var(--radius); padding: 2rem; text-align: center; background: #fff; }
+
+/* ---------- Footer ---------- */
+.site-footer { background: var(--soft); border-top: 1px solid var(--line); padding: 1.75rem 0; font-size: .95rem; color: var(--muted); }
+.footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem 2rem; }
+.footer-inner p { margin: 0; }
+.site-footer a { color: var(--ink); }
+
+/* =====================================================================
+   SMALLER SCREENS: side-by-side layouts stack on top of each other.
+   ===================================================================== */
+@media (max-width: 900px) {
+  .site-nav a { padding: .5rem .5rem; font-size: .9rem; }
+}
+
+@media (max-width: 760px) {
+  .nav-toggle { display: inline-flex; }
+  .site-nav { display: none; position: absolute; left: 0; right: 0; top: 100%; background: #fff; border-bottom: 1px solid var(--line); padding: .5rem 1.25rem 1rem; }
+  .site-nav.is-open { display: block; }
+  .site-nav ul { flex-direction: column; }
+  .site-nav a { padding: .75rem .25rem; font-size: 1.05rem; }
+
+  .split, .two-col, .checklist, .photo-row { grid-template-columns: 1fr; }
+  .two-col { gap: 1.5rem; }
+}
+
+@media (max-width: 520px) {
+  .btn-row .btn { width: 100%; text-align: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
