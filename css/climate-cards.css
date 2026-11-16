@@ -29,6 +29,11 @@
   --translate-y: 0px;
   --card-scale: 1;
   --card-radius: 4.55% / 3.5%;
+  /* Card colors: green by default (Food), blue on the Transportation page */
+  --card-border: #2e7d32;
+  --card-front: linear-gradient(145deg, #3d603b, #183b30 70%);
+  --card-back: linear-gradient(145deg, #eef3e4, #dce8d5);
+  --card-ink: #193b2d;
   position: relative;
   min-width: 0;
   color: #eff5e9;
@@ -107,11 +112,10 @@
   position: relative;
   min-width: 0;
   padding: 7%;
-  border: 1px solid #c5d5a6;
+  border: 4px solid var(--card-border);
   border-radius: var(--card-radius);
-  background: linear-gradient(145deg, #3d603b, #183b30 70%);
-  box-shadow: inset 0 0 0 5px #baca9d, inset 0 0 0 7px #557357,
-    0 10px 20px -5px #102d294d, 0 2px 15px -5px #102d2966;
+  background: var(--card-front);
+  box-shadow: 0 10px 20px -5px #102d294d, 0 2px 15px -5px #102d2966;
   overflow: hidden;
   overflow-wrap: anywhere;
   display: flex;
@@ -126,10 +130,16 @@
   transform: translateZ(.01px);
 }
 .climate-card.is-animated .climate-card__back { transform: rotateY(180deg) translateZ(.01px); }
-.climate-card__front { padding: 8px; gap: 0; }
+.climate-card__front { padding: 0; gap: 0; }
+.theme-move .climate-card {
+  --card-border: #1f63b5;
+  --card-front: linear-gradient(145deg, #2f5f96, #16365c 70%);
+  --card-back: linear-gradient(145deg, #eef4fb, #d9e6f4);
+  --card-ink: #14335a;
+}
 .climate-card__back {
-  background: linear-gradient(145deg, #eef3e4, #dce8d5);
-  color: #193b2d;
+  background: var(--card-back);
+  color: var(--card-ink);
   justify-content: center;
   gap: 6cqw;
 }
@@ -140,7 +150,6 @@
   min-height: 0;
   object-fit: cover;
   aspect-ratio: .718;
-  border-radius: 7px;
 }
 .climate-card.is-animated .climate-card__art { height: 100%; }
 .climate-card__body { font-size: max(13px, 5.4cqw); line-height: 1.5; }
@@ -173,8 +182,7 @@
   opacity: var(--card-opacity);
 }
 .climate-card__shine {
-  inset: 8px;
-  border-radius: 7px;
+  inset: 0;
   background-image:
     repeating-linear-gradient(110deg, #c929f1, #0dbde9, #21e985, #eedf10, #f80e35,
       #c929f1, #0dbde9, #21e985, #eedf10, #f80e35,
