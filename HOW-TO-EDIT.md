@@ -24,7 +24,7 @@ If you did both change the same sentence, nothing breaks and nothing is lost: pu
    - **Shift + Enter** starts a new line. Plain Enter does nothing, so it can't break the layout.
    - Pasting from Google Docs keeps the words and drops the formatting.
    - Blank-looking lines are empty spots waiting for text: click them and type.
-4. **Pictures:** click a picture, then **Choose new picture…**.
+4. **Pictures:** click a picture, then **Choose new picture…**. On the food cards, use the **Left ↔ Right** and **Top ↔ Bottom** sliders to choose which part of the picture shows on the card.
 5. **Button links:** click inside a button. A "Link goes to" box appears at the bottom.
 6. Click **Save** (or Ctrl + S / Cmd + S).
    - **The first time**, the browser asks which folder the website is in. Choose the folder with `index.html` in it, then click **Edit files** / **Allow**.

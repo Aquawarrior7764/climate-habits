@@ -64,6 +64,7 @@
     '#se-img{position:fixed;right:16px;bottom:84px;z-index:9999;width:min(340px,calc(100% - 32px));padding:16px;background:#fff;border:3px solid #f2b705;border-radius:14px;color:#12201c;font:15px/1.4 system-ui,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.25)}',
     '#se-img textarea{width:100%;min-height:70px;font:inherit;margin:4px 0 10px}',
     '#se-img .se-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}',
+    '#se-crop label{display:block;margin-top:6px}#se-crop input[type=range]{width:100%}',
     'body.se-editing{padding-bottom:90px}',
     '.se-editing [contenteditable="true"]{outline:1px dashed #f2b705;outline-offset:2px;cursor:text}',
     '.se-editing [contenteditable="true"]:hover{outline:2px dashed #f2b705}',
@@ -87,6 +88,12 @@
       '<strong>Picture</strong>' +
       '<div class="se-row"><button type="button" class="se-btn" id="se-img-choose">Choose new picture…</button></div>' +
       '<input type="file" id="se-img-file" accept="image/*" hidden>' +
+      '<div id="se-crop" hidden>' +
+        '<p style="margin:12px 0 0"><strong>Which part of the picture shows on the card</strong></p>' +
+        '<label>Left ↔ Right <input type="range" id="se-crop-x" min="0" max="100" step="1"></label>' +
+        '<label>Top ↔ Bottom <input type="range" id="se-crop-y" min="0" max="100" step="1"></label>' +
+        '<div class="se-row"><button type="button" class="se-btn se-light" id="se-crop-reset">Back to center</button></div>' +
+      '</div>' +
       '<p style="margin:10px 0 0"><label for="se-img-alt">Description for screen readers (alt text):</label></p>' +
       '<textarea id="se-img-alt"></textarea>' +
       '<div class="se-row"><button type="button" class="se-btn se-light" id="se-img-close">Close</button></div>' +
@@ -97,6 +104,7 @@
   var toggleBtn = $('se-toggle'), bar = $('se-bar'), statusEl = $('se-status');
   var linkLabel = $('se-link'), linkInput = $('se-link-input');
   var imgPanel = $('se-img'), imgFile = $('se-img-file'), imgAlt = $('se-img-alt');
+  var cropBox = $('se-crop'), cropX = $('se-crop-x'), cropY = $('se-crop-y');
 
   function setStatus(text) { statusEl.textContent = text; }
   function hasChanges() { return dirtyText.size > 0 || dirtyImages.size > 0; }
@@ -189,7 +197,28 @@
     currentImg = img;
     img.classList.add('se-picked');
     imgAlt.value = img.getAttribute('alt') || '';
+    // Crop sliders only for card pictures, which are cut to the card's shape.
+    cropBox.hidden = !img.matches(CROPPABLE);
+    var pos = readCrop(img);
+    cropX.value = pos[0];
+    cropY.value = pos[1];
     imgPanel.hidden = false;
+  }
+
+  /* ---------- Card picture crop ----------
+     Card pictures fill a tall card shape, so wide photos get cut off.
+     The sliders choose which part stays visible (CSS object-position). */
+  var CROPPABLE = '.climate-card__art';
+  function readCrop(img) {
+    var m = (img.style.objectPosition || '').match(/(-?[\d.]+)%\s+(-?[\d.]+)%/);
+    return m ? [Math.round(+m[1]), Math.round(+m[2])] : [50, 50];
+  }
+  function setCrop(x, y) {
+    if (!currentImg) return;
+    if (+x === 50 && +y === 50) currentImg.style.removeProperty('object-position');
+    else currentImg.style.objectPosition = x + '% ' + y + '%';
+    if (!currentImg.getAttribute('style')) currentImg.removeAttribute('style');
+    markImage(currentImg);
   }
   function closeImagePanel() {
     if (currentImg) currentImg.classList.remove('se-picked');
@@ -205,6 +234,12 @@
   }
 
   $('se-img-close').addEventListener('click', closeImagePanel);
+  cropX.addEventListener('input', function () { setCrop(cropX.value, cropY.value); });
+  cropY.addEventListener('input', function () { setCrop(cropX.value, cropY.value); });
+  $('se-crop-reset').addEventListener('click', function () {
+    cropX.value = cropY.value = 50;
+    setCrop(50, 50);
+  });
   $('se-img-choose').addEventListener('click', function () { imgFile.click(); });
   imgAlt.addEventListener('input', function () {
     if (!currentImg) return;
@@ -277,6 +312,8 @@
       var i = entry[0], info = entry[1];
       var live = liveImgs[i], target = docImgs[i];
       target.setAttribute('alt', live.getAttribute('alt') || '');
+      target.style.objectPosition = live.style.objectPosition || '';
+      if (!target.getAttribute('style')) target.removeAttribute('style');
       if (info.file) {
         target.setAttribute('src', useFolder ? 'images/' + info.name : await toDataUrl(info.file));
         target.removeAttribute('srcset');
