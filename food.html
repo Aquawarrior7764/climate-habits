@@ -1,6 +1,4 @@
 <!DOCTYPE html>
-<!-- Food card integration modified 2026-11-16; GPL-3.0-only.
-     Motion/lighting copyright (C) 2022 Simon Goellner; see CARD-CREDITS.md. -->
 <html lang="en"><head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,7 +7,7 @@
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/climate-cards.css">
   <!-- Defer from the head so main.js's editor snapshot includes this script. -->
-  <script src="js/climate-cards.js" defer></script>
+  <script src="js/climate-cards.js" defer=""></script>
 </head>
 <!-- The whole page is green because of class="theme-food" on <body> -->
 <body class="theme-food">
@@ -53,11 +51,11 @@
         <!-- Card content is static HTML so the page editor can save it.
              Each new card needs unique front/back IDs and matching aria-controls. -->
         <div class="climate-deck" aria-describedby="card-instructions">
-          <article class="climate-card" data-climate-card>
+          <article class="climate-card" data-climate-card="">
             <div class="climate-card__tilt">
               <div class="climate-card__flip">
                 <div class="climate-card__face climate-card__front" id="food-card-1-front">
-                  <img class="climate-card__art" src="images/card-art-placeholder.svg" width="600" height="840" alt="">
+                  <img class="climate-card__art" src="images/aviator-penetrator-cool-test-render-4.png" width="1920" height="1080" alt="" style="object-position: 40% 67%;">
                   <div class="climate-card__shine" aria-hidden="true"></div>
                   <div class="climate-card__glare" aria-hidden="true"></div>
                 </div>
@@ -68,9 +66,9 @@
                 </div>
               </div>
             </div>
-            <button class="climate-card__toggle" type="button" hidden aria-pressed="false" aria-controls="food-card-1-front food-card-1-back" aria-label="Turn over food card"></button>
+            <button class="climate-card__toggle" type="button" hidden="" aria-pressed="false" aria-controls="food-card-1-front food-card-1-back" aria-label="Turn over food card"></button>
           </article>
-          <article class="climate-card" data-climate-card>
+          <article class="climate-card" data-climate-card="">
             <div class="climate-card__tilt">
               <div class="climate-card__flip">
                 <div class="climate-card__face climate-card__front" id="food-card-2-front">
@@ -85,9 +83,9 @@
                 </div>
               </div>
             </div>
-            <button class="climate-card__toggle" type="button" hidden aria-pressed="false" aria-controls="food-card-2-front food-card-2-back" aria-label="Turn over food card"></button>
+            <button class="climate-card__toggle" type="button" hidden="" aria-pressed="false" aria-controls="food-card-2-front food-card-2-back" aria-label="Turn over food card"></button>
           </article>
-          <article class="climate-card" data-climate-card>
+          <article class="climate-card" data-climate-card="">
             <div class="climate-card__tilt">
               <div class="climate-card__flip">
                 <div class="climate-card__face climate-card__front" id="food-card-3-front">
@@ -102,9 +100,9 @@
                 </div>
               </div>
             </div>
-            <button class="climate-card__toggle" type="button" hidden aria-pressed="false" aria-controls="food-card-3-front food-card-3-back" aria-label="Turn over food card"></button>
+            <button class="climate-card__toggle" type="button" hidden="" aria-pressed="false" aria-controls="food-card-3-front food-card-3-back" aria-label="Turn over food card"></button>
           </article>
-          <article class="climate-card" data-climate-card>
+          <article class="climate-card" data-climate-card="">
             <div class="climate-card__tilt">
               <div class="climate-card__flip">
                 <div class="climate-card__face climate-card__front" id="food-card-4-front">
@@ -119,9 +117,9 @@
                 </div>
               </div>
             </div>
-            <button class="climate-card__toggle" type="button" hidden aria-pressed="false" aria-controls="food-card-4-front food-card-4-back" aria-label="Turn over food card"></button>
+            <button class="climate-card__toggle" type="button" hidden="" aria-pressed="false" aria-controls="food-card-4-front food-card-4-back" aria-label="Turn over food card"></button>
           </article>
-          <article class="climate-card" data-climate-card>
+          <article class="climate-card" data-climate-card="">
             <div class="climate-card__tilt">
               <div class="climate-card__flip">
                 <div class="climate-card__face climate-card__front" id="food-card-5-front">
@@ -136,9 +134,9 @@
                 </div>
               </div>
             </div>
-            <button class="climate-card__toggle" type="button" hidden aria-pressed="false" aria-controls="food-card-5-front food-card-5-back" aria-label="Turn over food card"></button>
+            <button class="climate-card__toggle" type="button" hidden="" aria-pressed="false" aria-controls="food-card-5-front food-card-5-back" aria-label="Turn over food card"></button>
           </article>
-          <article class="climate-card" data-climate-card>
+          <article class="climate-card" data-climate-card="">
             <div class="climate-card__tilt">
               <div class="climate-card__flip">
                 <div class="climate-card__face climate-card__front" id="food-card-6-front">
@@ -153,9 +151,9 @@
                 </div>
               </div>
             </div>
-            <button class="climate-card__toggle" type="button" hidden aria-pressed="false" aria-controls="food-card-6-front food-card-6-back" aria-label="Turn over food card"></button>
+            <button class="climate-card__toggle" type="button" hidden="" aria-pressed="false" aria-controls="food-card-6-front food-card-6-back" aria-label="Turn over food card"></button>
           </article>
-          <article class="climate-card" data-climate-card>
+          <article class="climate-card" data-climate-card="">
             <div class="climate-card__tilt">
               <div class="climate-card__flip">
                 <div class="climate-card__face climate-card__front" id="food-card-7-front">
@@ -170,9 +168,9 @@
                 </div>
               </div>
             </div>
-            <button class="climate-card__toggle" type="button" hidden aria-pressed="false" aria-controls="food-card-7-front food-card-7-back" aria-label="Turn over food card"></button>
+            <button class="climate-card__toggle" type="button" hidden="" aria-pressed="false" aria-controls="food-card-7-front food-card-7-back" aria-label="Turn over food card"></button>
           </article>
-          <article class="climate-card" data-climate-card>
+          <article class="climate-card" data-climate-card="">
             <div class="climate-card__tilt">
               <div class="climate-card__flip">
                 <div class="climate-card__face climate-card__front" id="food-card-8-front">
@@ -187,7 +185,7 @@
                 </div>
               </div>
             </div>
-            <button class="climate-card__toggle" type="button" hidden aria-pressed="false" aria-controls="food-card-8-front food-card-8-back" aria-label="Turn over food card"></button>
+            <button class="climate-card__toggle" type="button" hidden="" aria-pressed="false" aria-controls="food-card-8-front food-card-8-back" aria-label="Turn over food card"></button>
           </article>
         </div>
         <noscript>Both sides are shown below each other when JavaScript is off.</noscript>
@@ -202,4 +200,5 @@
     </div>
   </footer>
 
-  <script src="js/main.js"></script></body></html>
+  <script src="js/main.js"></script>
+</body></html>
