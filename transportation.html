@@ -4,6 +4,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Transportation Habits</title>
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/climate-cards.css">
+  <!-- Defer from the head so main.js's editor snapshot includes this script. -->
+  <script src="js/climate-cards.js" defer></script>
 </head>
 <!-- The whole page is blue because of class="theme-move" on <body> -->
 <body class="theme-move">
@@ -39,31 +42,151 @@
       </div>
     </section>
 
-    <section class="section">
-      <div class="wrap two-col">
-        <div>
-          <h2>THE CAR FACTS!!!!</h2>
-          <ul class="steps">
-            <li>Going car-free saves 2.4 tons of greenhouse gases a year (Wynes and Nicholas)</li>
-            <li>Taking the bus instead of driving cuts emissions by 26–76% (Wynes and Nicholas)</li>
-            <li>A more fuel-efficient car saves 1.19 tons a year (Wynes and Nicholas)</li>
-            <li>FILLER LALALA</li>
-          </ul>
+    <section class="section" id="quick-facts" aria-labelledby="quick-facts-title">
+      <div class="wrap">
+        <h2 id="quick-facts-title">Quick facts</h2>
+        <p id="card-instructions">Click a card to take a closer look.</p>
+        <!-- Card content is static HTML so the page editor can save it.
+             Each new card needs unique front/back IDs and matching aria-controls. -->
+        <div class="climate-deck" aria-describedby="card-instructions">
+          <article class="climate-card" data-climate-card>
+            <div class="climate-card__tilt">
+              <div class="climate-card__flip">
+                <div class="climate-card__face climate-card__front" id="move-card-1-front">
+                  <img class="climate-card__art" src="images/card-art-placeholder.svg" width="600" height="840" alt="">
+                  <div class="climate-card__shine" aria-hidden="true"></div>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+                <div class="climate-card__face climate-card__back" id="move-card-1-back">
+                  <h3>2.4 tons</h3>
+                  <p class="climate-card__body">of greenhouse gases saved a year by going car-free (Wynes and Nicholas)</p>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+              </div>
+            </div>
+            <button class="climate-card__toggle" type="button" hidden aria-pressed="false" aria-controls="move-card-1-front move-card-1-back" aria-label="Turn over card"></button>
+          </article>
+          <article class="climate-card" data-climate-card>
+            <div class="climate-card__tilt">
+              <div class="climate-card__flip">
+                <div class="climate-card__face climate-card__front" id="move-card-2-front">
+                  <img class="climate-card__art" src="images/card-art-placeholder.svg" width="600" height="840" alt="">
+                  <div class="climate-card__shine" aria-hidden="true"></div>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+                <div class="climate-card__face climate-card__back" id="move-card-2-back">
+                  <h3>26–76%</h3>
+                  <p class="climate-card__body">lower emissions when you take the bus instead of driving (Wynes and Nicholas)</p>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+              </div>
+            </div>
+            <button class="climate-card__toggle" type="button" hidden aria-pressed="false" aria-controls="move-card-2-front move-card-2-back" aria-label="Turn over card"></button>
+          </article>
+          <article class="climate-card" data-climate-card>
+            <div class="climate-card__tilt">
+              <div class="climate-card__flip">
+                <div class="climate-card__face climate-card__front" id="move-card-3-front">
+                  <img class="climate-card__art" src="images/card-art-placeholder.svg" width="600" height="840" alt="">
+                  <div class="climate-card__shine" aria-hidden="true"></div>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+                <div class="climate-card__face climate-card__back" id="move-card-3-back">
+                  <h3>1.19 tons</h3>
+                  <p class="climate-card__body">saved a year by driving a more fuel-efficient car (Wynes and Nicholas)</p>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+              </div>
+            </div>
+            <button class="climate-card__toggle" type="button" hidden aria-pressed="false" aria-controls="move-card-3-front move-card-3-back" aria-label="Turn over card"></button>
+          </article>
+          <article class="climate-card" data-climate-card>
+            <div class="climate-card__tilt">
+              <div class="climate-card__flip">
+                <div class="climate-card__face climate-card__front" id="move-card-4-front">
+                  <img class="climate-card__art" src="images/card-art-placeholder.svg" width="600" height="840" alt="">
+                  <div class="climate-card__shine" aria-hidden="true"></div>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+                <div class="climate-card__face climate-card__back" id="move-card-4-back">
+                  <h3>lalala filler</h3>
+                  <p class="climate-card__body">lalala filler</p>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+              </div>
+            </div>
+            <button class="climate-card__toggle" type="button" hidden aria-pressed="false" aria-controls="move-card-4-front move-card-4-back" aria-label="Turn over card"></button>
+          </article>
+          <article class="climate-card" data-climate-card>
+            <div class="climate-card__tilt">
+              <div class="climate-card__flip">
+                <div class="climate-card__face climate-card__front" id="move-card-5-front">
+                  <img class="climate-card__art" src="images/card-art-placeholder.svg" width="600" height="840" alt="">
+                  <div class="climate-card__shine" aria-hidden="true"></div>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+                <div class="climate-card__face climate-card__back" id="move-card-5-back">
+                  <h3>lalala filler</h3>
+                  <p class="climate-card__body">lalala filler</p>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+              </div>
+            </div>
+            <button class="climate-card__toggle" type="button" hidden aria-pressed="false" aria-controls="move-card-5-front move-card-5-back" aria-label="Turn over card"></button>
+          </article>
+          <article class="climate-card" data-climate-card>
+            <div class="climate-card__tilt">
+              <div class="climate-card__flip">
+                <div class="climate-card__face climate-card__front" id="move-card-6-front">
+                  <img class="climate-card__art" src="images/card-art-placeholder.svg" width="600" height="840" alt="">
+                  <div class="climate-card__shine" aria-hidden="true"></div>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+                <div class="climate-card__face climate-card__back" id="move-card-6-back">
+                  <h3>lalala filler</h3>
+                  <p class="climate-card__body">lalala filler</p>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+              </div>
+            </div>
+            <button class="climate-card__toggle" type="button" hidden aria-pressed="false" aria-controls="move-card-6-front move-card-6-back" aria-label="Turn over card"></button>
+          </article>
+          <article class="climate-card" data-climate-card>
+            <div class="climate-card__tilt">
+              <div class="climate-card__flip">
+                <div class="climate-card__face climate-card__front" id="move-card-7-front">
+                  <img class="climate-card__art" src="images/card-art-placeholder.svg" width="600" height="840" alt="">
+                  <div class="climate-card__shine" aria-hidden="true"></div>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+                <div class="climate-card__face climate-card__back" id="move-card-7-back">
+                  <h3>lalala filler</h3>
+                  <p class="climate-card__body">lalala filler</p>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+              </div>
+            </div>
+            <button class="climate-card__toggle" type="button" hidden aria-pressed="false" aria-controls="move-card-7-front move-card-7-back" aria-label="Turn over card"></button>
+          </article>
+          <article class="climate-card" data-climate-card>
+            <div class="climate-card__tilt">
+              <div class="climate-card__flip">
+                <div class="climate-card__face climate-card__front" id="move-card-8-front">
+                  <img class="climate-card__art" src="images/card-art-placeholder.svg" width="600" height="840" alt="">
+                  <div class="climate-card__shine" aria-hidden="true"></div>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+                <div class="climate-card__face climate-card__back" id="move-card-8-back">
+                  <h3>lalala filler</h3>
+                  <p class="climate-card__body">lalala filler</p>
+                  <div class="climate-card__glare" aria-hidden="true"></div>
+                </div>
+              </div>
+            </div>
+            <button class="climate-card__toggle" type="button" hidden aria-pressed="false" aria-controls="move-card-8-front move-card-8-back" aria-label="Turn over card"></button>
+          </article>
         </div>
-        <div>
-          <img class="rounded" src="images/aviator-penetrator-cool-test-render-3.png" width="1920" height="1080" alt="">
-        </div>
-      </div>
-    </section>
-
-    <section class="section tinted">
-      <div class="wrap narrow">
-        <h2>Transportation game</h2>
-        <!-- PLACEHOLDER: this box is design filler, not content. Replace it with the game. -->
-        <div class="placeholder">
-          <p><strong>Placeholder</strong></p>
-          <p class="fine-print">lalalalalalala</p>
-        </div>
+        <noscript>Both sides are shown below each other when JavaScript is off.</noscript>
       </div>
     </section>
   </main>
