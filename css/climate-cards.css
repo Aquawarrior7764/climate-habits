@@ -1,8 +1,8 @@
 /* SPDX-License-Identifier: GPL-3.0-only
  * Adapted from pokemon-cards-css/public/css/cards/{base,regular-holo}.css.
  * Copyright (C) 2022 Simon Goellner, @simeydotme.
- * Modified for Climate Habits, 2026-11-15: scoped selectors, muted foil,
- * HTML faces, independent tilt/flip layers, editor and accessible fallbacks.
+ * Modified for Climate Habits, 2026-11-16: scoped selectors, muted foil,
+ * image-only fronts, spring popover, editor and accessible fallbacks.
  * Distributed without warranty. See ../CARD-CREDITS.md and ../licenses/.
  */
 
@@ -25,6 +25,9 @@
   --rotate-x: 0deg;
   --rotate-y: 0deg;
   --flip-angle: 0deg;
+  --translate-x: 0px;
+  --translate-y: 0px;
+  --card-scale: 1;
   --card-radius: 4.55% / 3.5%;
   position: relative;
   min-width: 0;
@@ -35,6 +38,47 @@
 /* The hit area stays flat: measuring a tilted face causes feedback/jitter. */
 .climate-card.is-animated { aspect-ratio: .718; }
 .climate-card.is-moving { z-index: 2; }
+.climate-card-placeholder { aspect-ratio: .718; min-width: 0; }
+.climate-card.is-expanded {
+  position: fixed;
+  left: var(--origin-left);
+  top: var(--origin-top);
+  width: var(--origin-width);
+  height: var(--origin-height);
+  transform: translate3d(var(--translate-x), var(--translate-y), 0) scale(var(--card-scale));
+  transform-origin: center;
+}
+.climate-card.is-expanded.is-moving { will-change: transform; }
+.climate-card-open { overflow: hidden; }
+.climate-card-viewer {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: hidden;
+}
+.climate-card-viewer::backdrop { background: #102d2973; backdrop-filter: blur(2px); }
+.climate-card-viewer__close {
+  position: absolute;
+  top: max(16px, env(safe-area-inset-top));
+  right: max(20px, env(safe-area-inset-right));
+  z-index: 10;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid #a9ba9f;
+  border-radius: 50%;
+  background: #f0f5e9;
+  color: #193b2d;
+  font: 30px/1 system-ui, sans-serif;
+  cursor: pointer;
+}
 .climate-card__tilt, .climate-card__flip { height: 100%; }
 .climate-card.is-animated .climate-card__tilt,
 .climate-card.is-animated .climate-card__flip {
@@ -72,34 +116,24 @@
   transform: translateZ(.01px);
 }
 .climate-card.is-animated .climate-card__back { transform: rotateY(180deg) translateZ(.01px); }
-.climate-card__back { background: linear-gradient(145deg, #eef3e4, #dce8d5); color: #193b2d; }
+.climate-card__front { padding: 8px; gap: 0; }
+.climate-card__back {
+  background: linear-gradient(145deg, #eef3e4, #dce8d5);
+  color: #193b2d;
+  justify-content: center;
+  gap: 20px;
+}
 .climate-card__face p { margin: 0; }
 .climate-card__face h3 { margin: 0; color: inherit; font-size: clamp(18px, 1.7vw, 24px); line-height: 1.2; }
-.climate-card__eyebrow { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; font-weight: 650; }
 .climate-card__art {
   width: 100%;
   min-height: 0;
-  flex: 1;
   object-fit: cover;
-  aspect-ratio: 1.25;
-  border: 1px solid #9bb48e;
-  border-radius: 3px;
+  aspect-ratio: .718;
+  border-radius: 7px;
 }
-.climate-card__caption { font-size: 14px; line-height: 1.4; }
+.climate-card.is-animated .climate-card__art { height: 100%; }
 .climate-card__body { font-size: 16px; line-height: 1.55; }
-.climate-card__prompt { font-size: 14px; line-height: 1.5; border-top: 1px solid #a6baa0; padding-top: 14px; }
-.climate-card__face .climate-card__hint {
-  margin-top: auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding-top: 12px;
-  border-top: 1px solid #a3b38b66;
-  font-size: 11px;
-  letter-spacing: .3px;
-}
-.climate-card__hint span { font-size: 21px; line-height: 1; }
 
 /* A native button sits above the visual faces; no editable text inside a button. */
 .climate-card__toggle {
@@ -129,8 +163,8 @@
   opacity: var(--card-opacity);
 }
 .climate-card__shine {
-  inset: 24% 7% 24%;
-  border-radius: 3px;
+  inset: 8px;
+  border-radius: 7px;
   background-image:
     repeating-linear-gradient(110deg, #c929f1, #0dbde9, #21e985, #eedf10, #f80e35,
       #c929f1, #0dbde9, #21e985, #eedf10, #f80e35,
@@ -160,9 +194,6 @@
   opacity: calc(var(--card-opacity) * (.28 + var(--pointer-from-center) * .22));
 }
 .climate-card__back .climate-card__glare { opacity: calc(var(--card-opacity) * .12); }
-.climate-card-credits { font-size: .8rem; color: #52634c; max-width: 68em; }
-.climate-card-credits summary { cursor: pointer; width: fit-content; }
-.climate-card-credits p { margin-top: .75em; }
 
 /* Editing and no-JS: lay both faces out in normal flow, without animation,
  * so every image and paragraph can be selected and long text never clips. */
@@ -172,6 +203,7 @@
 .se-editing .climate-card .climate-card__flip { transform: none; }
 .se-editing .climate-card__flip { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .se-editing .climate-card .climate-card__face { position: relative; transform: none; backface-visibility: visible; }
+.se-editing .climate-card.is-animated .climate-card__art { height: auto; }
 .se-editing .climate-card__toggle,
 .se-editing .climate-card__shine,
 .se-editing .climate-card__glare { display: none; }
@@ -189,6 +221,9 @@
   .climate-card__shine, .climate-card__glare { display: none; }
 }
 @media print {
+  .climate-card-viewer[open] { position: static; height: auto; overflow: visible; }
+  .climate-card.is-expanded { position: static; width: auto; height: auto; transform: none; }
+  .climate-card-viewer__close { display: none; }
   .climate-deck { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .climate-card.is-animated { aspect-ratio: auto; break-inside: avoid; }
   .climate-card .climate-card__tilt, .climate-card .climate-card__flip { transform: none; }

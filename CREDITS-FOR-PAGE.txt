@@ -1,0 +1,43 @@
+CLIMATE HABITS — CARD EFFECT CREDITS
+
+Prepared for a dedicated credits page, November 16, 2026.
+
+POKÉMON CARDS CSS
+Card motion, lighting, and the spin-to-center interaction are adapted from
+Pokémon Cards CSS by Simon Goellner (@simeydotme).
+Copyright (C) 2022 Simon Goellner.
+Project: https://github.com/simeydotme/pokemon-cards-css
+Original demo: https://poke-holo.simey.me/
+Adapted revision: acb1197633e749a1fba4412231db2f6581586d00
+
+The Climate Habits card experience is free software under the GNU General
+Public License, version 3 (GPL-3.0-only). You may redistribute and modify it
+under that license. It is provided WITHOUT ANY WARRANTY, including implied
+warranties of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+Full license: https://www.gnu.org/licenses/gpl-3.0.html
+Included copy: licenses/pokemon-cards-css-GPL-3.0.txt
+
+Climate Habits modifications, November 15–16, 2026: vanilla JavaScript port,
+spring-driven centering/enlargement and full-turn-plus-half-turn reveal,
+image-only fronts, concise editable backs, quieter foil, keyboard/touch and
+reduced-motion support, and compatibility with the local page editor.
+
+CORRESPONDING SOURCE
+The editable, unminified card source is food.html, css/climate-cards.css,
+and js/climate-cards.js. There is no build step or bundled framework.
+When publishing this adaptation, make the current corresponding source
+available under GPL-3.0 and retain the copyright and license notices.
+Include links to the current source and full license on the credits page.
+
+SVELTE SPRING INTEGRATION
+The numeric spring integrator is adapted from Svelte 3.52.0, under MIT.
+Copyright (c) 2016–22 the Svelte contributors.
+Project: https://github.com/sveltejs/svelte
+Source: https://github.com/sveltejs/svelte/blob/v3.52.0/src/runtime/motion/spring.ts
+The complete MIT copyright/permission/warranty notice is retained in
+licenses/svelte-MIT.txt. Keep that notice with distributed source copies.
+
+ARTWORK
+No Pokémon artwork, logos, or original card backs are used. The simple green
+leaf is placeholder artwork created for Climate Habits. Add separate credits
+and permissions for any photos or artwork you use to replace it.

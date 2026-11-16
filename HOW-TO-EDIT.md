@@ -33,7 +33,7 @@ If you did both change the same sentence, nothing breaks and nothing is lost: pu
 
 ## Editing the Food cards
 
-On `food.html`, click **✎ Edit this page**. Each card opens into a front/back pair. Click its sample image to replace it and click the back paragraphs to add your own text. The cards stay still while you edit. Keep the title the same on both sides and keep the back copy short enough to fit. Click **Save**, then **Done** to restore normal mouse tilt and click/tap flipping. Check the result on a phone-width window. The text and picture are stored in `food.html`, just like your other page edits.
+On `food.html`, close any enlarged card, then click **✎ Edit this page**. Each card opens into a front/back pair. Click its sample image to replace it and click the back title and single short paragraph to add your own text. The front has no text. The cards stay still while you edit. Keep the back copy concise. Click **Save**, then **Done** to restore normal mouse tilt and click/tap spin-to-center behavior. Check the result on a phone-width window. The text and picture are stored in `food.html`, just like your other page edits.
 
 The three green leaf images are intentional placeholders. The sample names and back text are starting points; replace them with your own food items and educational content. Adding a fourth card requires copying its HTML block and giving its front/back unique IDs (see [CARD-CREDITS.md](CARD-CREDITS.md)).
 

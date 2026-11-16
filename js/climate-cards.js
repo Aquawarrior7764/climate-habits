@@ -2,8 +2,8 @@
  * Pointer mapping and spring settings adapted from pokemon-cards-css,
  * src/lib/components/Card.svelte and src/lib/helpers/Math.js.
  * Copyright (C) 2022 Simon Goellner, @simeydotme.
- * Modified for Climate Habits, 2026-11-15: dependency-free numeric spring,
- * shared idle-aware scheduler, independent flip, keyboard/touch/editor support.
+ * Modified for Climate Habits, 2026-11-16: dependency-free numeric spring,
+ * original-style centered spin/popover, keyboard/touch/editor support.
  * Spring integration adapted from Svelte 3.52.0 (MIT); see licenses/svelte-MIT.txt.
  * This program is free software under GPL-3.0, without warranty.
  * See ../CARD-CREDITS.md and ../licenses/pokemon-cards-css-GPL-3.0.txt.
@@ -22,6 +22,21 @@
   let frame = 0;
   let lastTime = 0;
   let editing = document.body.classList.contains('se-editing');
+  let activeCard = null;
+
+  // A native dialog supplies the top layer, focus containment, and background
+  // inertness. Move the actual card here; a placeholder preserves its grid slot.
+  const viewer = document.createElement('dialog');
+  viewer.className = 'climate-card-viewer';
+  viewer.id = 'climate-card-viewer';
+  const closeButton = document.createElement('button');
+  closeButton.type = 'button';
+  closeButton.className = 'climate-card-viewer__close';
+  closeButton.setAttribute('aria-label', 'Close card');
+  closeButton.autofocus = true;
+  closeButton.textContent = '×';
+  viewer.append(closeButton);
+  document.body.append(viewer);
 
   class Spring {
     constructor(value, stiffness = .066, damping = .25) {
@@ -81,7 +96,10 @@
         card.accumulator -= 1;
       }
       render(card);
-      if (!active) {
+      if (card.closing && ['tx', 'ty', 'scale', 'flip'].every((key) =>
+        Math.abs(card.springs[key].value - card.springs[key].target) < .01)) {
+        finishClose(card);
+      } else if (!active) {
         moving.delete(card);
         card.accumulator = 0;
         card.element.classList.remove('is-moving');
@@ -97,6 +115,9 @@
     set('--rotate-x', value('rx'), 'deg');
     set('--rotate-y', value('ry'), 'deg');
     set('--flip-angle', value('flip'), 'deg');
+    set('--translate-x', value('tx'), 'px');
+    set('--translate-y', value('ty'), 'px');
+    set('--card-scale', value('scale'));
     set('--pointer-x', value('px'), '%');
     set('--pointer-y', value('py'), '%');
     set('--background-x', value('bx'), '%');
@@ -106,9 +127,10 @@
   }
 
   function updateAccessibility(card) {
-    const name = card.front.querySelector('h3').textContent.trim();
+    const name = card.back.querySelector('h3').textContent.trim() || 'Food card';
     card.button.setAttribute('aria-pressed', String(card.flipped));
-    card.button.setAttribute('aria-label', `${name}: ${card.flipped ? 'show front' : 'show back'}`);
+    card.button.setAttribute('aria-expanded', String(card.expanded));
+    card.button.setAttribute('aria-label', `${name}: ${card.expanded ? 'return to deck' : 'take a closer look'}`);
     card.button.setAttribute('aria-describedby', card.flipped ? card.back.id : card.front.id);
     card.front.setAttribute('aria-hidden', String(!editing && card.flipped));
     card.back.setAttribute('aria-hidden', String(!editing && !card.flipped));
@@ -121,12 +143,130 @@
       else card.springs[key].set(target, .01, .06, true);
     });
     if (immediate) {
-      card.springs.flip.snap(card.flipped ? 180 : 0);
       moving.delete(card);
       card.element.classList.remove('is-moving');
       render(card);
     } else wake(card);
   }
+
+  function setPose(card, targets, immediate = reducedMotion.matches) {
+    Object.entries(targets).forEach(([key, target]) => {
+      if (immediate) card.springs[key].snap(target);
+      else card.springs[key].set(target, .033, .45);
+    });
+    if (immediate) render(card);
+    else wake(card);
+  }
+
+  function center(card, immediate = reducedMotion.matches) {
+    const rect = card.origin;
+    const width = document.documentElement.clientWidth;
+    const height = window.innerHeight;
+    // Original setCenter()/popover(): spring translation, viewport-constrained
+    // enlargement, and a 1.75x cap. A full turn plus half reveals our short back.
+    setPose(card, {
+      tx: width / 2 - rect.left - rect.width / 2,
+      ty: height / 2 - rect.top - rect.height / 2,
+      scale: Math.min(width / rect.width * .84, height / rect.height * .82, 1.75),
+      flip: 540
+    }, immediate);
+  }
+
+  function publishState(card) {
+    updateAccessibility(card);
+    card.element.dispatchEvent(new CustomEvent('climatecardflip', {
+      bubbles: true, detail: { flipped: card.flipped }
+    }));
+  }
+
+  function openCard(card) {
+    if (activeCard && activeCard !== card) finishClose(activeCard, false);
+    reset(card, true);
+    if (!activeCard) {
+      card.origin = card.element.getBoundingClientRect();
+      card.placeholder = document.createElement('div');
+      card.placeholder.className = 'climate-card-placeholder';
+      card.placeholder.setAttribute('aria-hidden', 'true');
+      card.element.before(card.placeholder);
+      const origin = card.origin;
+      const style = card.element.style;
+      style.setProperty('--origin-left', origin.left + 'px');
+      style.setProperty('--origin-top', origin.top + 'px');
+      style.setProperty('--origin-width', origin.width + 'px');
+      style.setProperty('--origin-height', origin.height + 'px');
+      viewer.append(card.element);
+      card.element.classList.add('is-expanded');
+      document.documentElement.classList.add('climate-card-open');
+      activeCard = card;
+      viewer.setAttribute('aria-label', card.back.querySelector('h3').textContent.trim());
+      viewer.setAttribute('aria-describedby', card.back.id);
+      viewer.showModal();
+    }
+    card.closing = false;
+    card.expanded = card.flipped = true;
+    center(card);
+    publishState(card);
+  }
+
+  function closeCard(immediate = reducedMotion.matches) {
+    const card = activeCard;
+    if (!card) return;
+    reset(card, true);
+    card.expanded = card.flipped = false;
+    card.closing = true;
+    publishState(card);
+    if (immediate) {
+      finishClose(card);
+      return;
+    }
+    // Re-read the slot, since scrolling/resizing may have moved the deck.
+    const slot = card.placeholder.getBoundingClientRect();
+    const origin = card.origin;
+    setPose(card, {
+      tx: slot.left + slot.width / 2 - origin.left - origin.width / 2,
+      ty: slot.top + slot.height / 2 - origin.top - origin.height / 2,
+      scale: slot.width / origin.width,
+      flip: 0
+    }, false);
+  }
+
+  function finishClose(card, restoreFocus = true) {
+    if (activeCard !== card) return;
+    card.placeholder.replaceWith(card.element);
+    card.placeholder = null;
+    card.expanded = card.flipped = card.closing = false;
+    card.element.classList.remove('is-expanded', 'is-moving');
+    ['left', 'top', 'width', 'height'].forEach((key) => card.element.style.removeProperty('--origin-' + key));
+    setPose(card, { tx: 0, ty: 0, scale: 1, flip: 0 }, true);
+    moving.delete(card);
+    card.accumulator = 0;
+    activeCard = null;
+    viewer.close();
+    document.documentElement.classList.remove('climate-card-open');
+    updateAccessibility(card);
+    if (restoreFocus && !editing) card.button.focus({ preventScroll: true });
+  }
+
+  closeButton.addEventListener('click', () => closeCard());
+  viewer.addEventListener('click', (event) => { if (event.target === viewer) closeCard(); });
+  viewer.addEventListener('cancel', (event) => { event.preventDefault(); closeCard(); });
+  viewer.addEventListener('keydown', (event) => {
+    if (event.key !== 'Tab' || !activeCard) return;
+    const first = closeButton;
+    const last = activeCard.button;
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+  window.addEventListener('resize', () => {
+    if (!activeCard) return;
+    if (activeCard.closing) closeCard();
+    else center(activeCard);
+  });
 
   elements.forEach((element) => {
     const button = element.querySelector('.climate-card__toggle');
@@ -134,17 +274,22 @@
     const back = element.querySelector('.climate-card__back');
     if (!button || !front || !back) return;
     const card = {
-      element, button, front, back, flipped: false, leaveTimer: 0, accumulator: 0,
+      element, button, front, back, flipped: false, expanded: false, closing: false,
+      leaveTimer: 0, accumulator: 0, origin: null, placeholder: null,
       springs: Object.fromEntries(Object.entries(resting).map(([key, value]) => [key, new Spring(value)]))
     };
     card.springs.flip = new Spring(0, .033, .45);
+    card.springs.tx = new Spring(0, .033, .45);
+    card.springs.ty = new Spring(0, .033, .45);
+    card.springs.scale = new Spring(1, .033, .45);
     cards.push(card);
     element.classList.add('is-animated');
     button.hidden = false;
+    button.setAttribute('aria-haspopup', 'dialog');
     updateAccessibility(card);
 
     element.addEventListener('pointermove', (event) => {
-      if (editing || reducedMotion.matches || event.pointerType === 'touch') return;
+      if (editing || card.closing || reducedMotion.matches || event.pointerType === 'touch') return;
       clearTimeout(card.leaveTimer);
       const rect = element.getBoundingClientRect();
       const x = clamp((event.clientX - rect.left) / rect.width * 100, 0, 100);
@@ -162,19 +307,16 @@
       clearTimeout(card.leaveTimer);
       if (!editing && !reducedMotion.matches) card.leaveTimer = setTimeout(() => reset(card), 500);
     }, { passive: true });
-    element.addEventListener('pointercancel', () => reset(card, true), { passive: true });
-    button.addEventListener('blur', () => reset(card, true));
+    element.addEventListener('pointercancel', () => {
+      reset(card, true);
+      // A canceled touch gesture must not strand the popover mid-flight.
+      if (card.expanded || card.closing) wake(card);
+    }, { passive: true });
+    button.addEventListener('blur', () => { if (!card.expanded && !card.closing) reset(card, true); });
     button.addEventListener('click', () => {
       if (editing) return;
-      card.flipped = !card.flipped;
-      card.springs.flip.set(card.flipped ? 180 : 0);
-      updateAccessibility(card);
-      if (reducedMotion.matches) reset(card, true);
-      else wake(card);
-      // Future game logic can listen without coupling scoring to animation.
-      element.dispatchEvent(new CustomEvent('climatecardflip', {
-        bubbles: true, detail: { flipped: card.flipped }
-      }));
+      if (card.expanded) closeCard();
+      else openCard(card);
     });
   });
 
@@ -184,6 +326,7 @@
     const next = document.body.classList.contains('se-editing');
     if (next === editing) return;
     editing = next;
+    if (activeCard) finishClose(activeCard, false);
     cards.forEach((card) => { reset(card, true); updateAccessibility(card); });
   }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
@@ -191,6 +334,10 @@
     cancelAnimationFrame(frame);
     frame = 0;
     cards.forEach((card) => reset(card, true));
+    if (activeCard) {
+      if (activeCard.closing || document.hidden) finishClose(activeCard, false);
+      else center(activeCard, true);
+    }
     moving.clear();
   }
   reducedMotion.addEventListener('change', stopMotion);
